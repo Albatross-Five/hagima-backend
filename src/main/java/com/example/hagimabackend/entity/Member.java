@@ -1,31 +1,27 @@
 package com.example.hagimabackend.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Value;
 
-import java.util.UUID;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
 @Table(name = "tb_member")
+@NoArgsConstructor
 public class Member {
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid2", type = org.hibernate.id.uuid.UuidGenerator.class)
-    @Column(length = 16)
-    private UUID member_uuid;
-
-    @OneToOne(targetEntity = Kakao.class)
-    @Value("id")
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     @NotNull
-    @Column(length = 10)
-    private String name;
+    private String kakao_id;
 
-    @NotNull
-    private Integer pin;
+    @Builder
+    public Member(@NotNull String uuid) {
+        this.kakao_id = uuid;
+    }
 }
