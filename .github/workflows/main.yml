@@ -18,7 +18,5 @@ jobs:
           port: ${{ secrets.REMOTE_SSH_PORT }}
           script: |
             whoami
-            cd /root/hagima-backend
-            git pull
-            gradle clean build
-            sudo systemctl restart hagima
+            chmod 700 /root/hagima-backend/deploy.sh 
+            sudo /root/hagima-backend/deploy.sh
