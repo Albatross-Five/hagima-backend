@@ -8,3 +8,4 @@ cd /root/hagima-backend
 git pull
 /root/.sdkman/candidates/gradle/current/bin/gradle clean build
 sudo systemctl restart hagima
+sudo systemctl status hagima
