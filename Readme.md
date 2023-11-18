@@ -10,4 +10,4 @@
 1. Spring Boot 3 (Java17)
 2. Naver Cloud
    1. Server
-   2. Cloud DB for MySQL
+   2. Cloud DB for MySQL 
