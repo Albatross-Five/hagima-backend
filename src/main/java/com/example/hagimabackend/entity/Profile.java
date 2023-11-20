@@ -1,26 +1,23 @@
 package com.example.hagimabackend.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Value;
-
-import java.util.UUID;
 
 @Entity
 @Getter
+@NoArgsConstructor
 @Table(name = "tb_profile")
 public class Profile {
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid2", type = org.hibernate.id.uuid.UuidGenerator.class)
-    @Column(length = 16)
-    private UUID member_uuid;
-
-    @OneToOne(targetEntity = Member.class)
-    @Value("id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(targetEntity = Member.class)
+    @JoinColumn(name = "member_uuid", referencedColumnName = "uuid")
+    private Member member;
 
     @NotNull
     @Column(length = 10)
@@ -28,4 +25,11 @@ public class Profile {
 
     @NotNull
     private Integer pin;
+
+    @Builder
+    public Profile(Member member, @NotNull String name, @NotNull Integer pin) {
+        this.member = member;
+        this.name = name;
+        this.pin = pin;
+    }
 }

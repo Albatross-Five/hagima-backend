@@ -26,7 +26,7 @@ public class SignupController {
         Member member = memberService.register();
 
         return new ResponseEntity<>(
-                DataResponse.of(HttpStatus.OK, "회원 가입 성공", new GuestSignupResponseDTO(member.getKakao_id())), HttpStatus.OK);
+                DataResponse.of(HttpStatus.OK, "회원 가입 성공", new GuestSignupResponseDTO(member.getUuid().toString())), HttpStatus.OK);
 
     }
 }
