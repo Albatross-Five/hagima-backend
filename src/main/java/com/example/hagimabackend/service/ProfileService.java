@@ -25,7 +25,6 @@ public class ProfileService {
                 .name(profileRequest.getNickname())
                 .pin(profileRequest.getPin()).build();
 
-        System.out.println(profileRequest.getFaceImg().getSize());
         String name = member.getUuid().toString() + "=" + profile.getName();
         storageService.uploadProfile(name, profileRequest.getFaceImg());
         profileRepository.save(profile);

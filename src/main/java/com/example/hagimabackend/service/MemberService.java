@@ -19,7 +19,6 @@ public class MemberService implements UserDetailsService {
     public Member register() {
         Member member = new Member();
         memberRepository.save(member);
-        System.out.println(member.getUuid().toString());
         return member;
     }
 

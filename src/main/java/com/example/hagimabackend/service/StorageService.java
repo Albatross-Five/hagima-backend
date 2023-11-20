@@ -24,7 +24,6 @@ public class StorageService {
     private final AmazonS3 s3;
 
     public StorageService(Environment environment) {
-        System.out.println("GET KEYS: " + environment.getProperty("API_ACCESS") + " " + environment.getProperty("API_SECRET"));
         this.s3 = AmazonS3ClientBuilder.standard()
                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(Objects.requireNonNull(environment.getProperty("API_ACCESS")), Objects.requireNonNull(environment.getProperty("API_SECRET")))))
@@ -36,7 +35,6 @@ public class StorageService {
         data.setContentLength(file.getSize());
         try {
 
-            System.out.println("파일 올리기 " + file.getName());
             PutObjectResult objectResult = s3.putObject(bucketName, name, file.getInputStream(), data);
             System.out.format("Object %s has been created.\n", objectResult.getContentMd5());
         } catch(SdkClientException | IOException e) {
