@@ -1,7 +1,10 @@
 package com.example.hagimabackend.controller;
 
 import com.example.hagimabackend.controller.dto.ProfileRequestDTO;
+import com.example.hagimabackend.controller.dto.ProfileResponseDto;
 import com.example.hagimabackend.entity.CustomUserDetails;
+import com.example.hagimabackend.entity.Member;
+import com.example.hagimabackend.global.response.DataResponse;
 import com.example.hagimabackend.global.response.MessageResponse;
 import com.example.hagimabackend.service.ProfileService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,7 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/profile")
@@ -25,12 +28,20 @@ public class ProfileController {
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "프로필 등록")
-    public ResponseEntity<MessageResponse> registerProfile (@ModelAttribute ProfileRequestDTO profile) throws IOException {
+    public ResponseEntity<MessageResponse> registerProfile (@ModelAttribute ProfileRequestDTO profile) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
         profileService.register(userDetails.getMember(), profile);
 
         return new ResponseEntity<>(MessageResponse.of(HttpStatus.OK, "프로필 등록 성공"), HttpStatus.OK);
+    }
+
+    @GetMapping("")
+    @Operation(summary = "프로필 목록 조회")
+    public ResponseEntity<DataResponse<List<ProfileResponseDto>>> getProfiles () {
+        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member member =  userDetails.getMember();
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.OK, "프로필 조회 성공", profileService.getProfiles(member.getUuid().toString())), HttpStatus.OK);
     }
 }

@@ -1,36 +1,36 @@
 package com.example.hagimabackend.service;
 
+import com.amazonaws.HttpMethod;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectResult;
-import lombok.RequiredArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.util.Objects;
 
 @Service
-@RequiredArgsConstructor
 public class StorageService {
     final String endPoint = "https://kr.object.ncloudstorage.com";
     final String regionName = "kr-standard";
-    final String accessKey = "B95338A9D6664A737936";
-    final String secretKey = "11161FB5FD4CE025A5EB85D556C819471C694722";
+    final String bucketName = "hagima-face";
+    private final AmazonS3 s3;
 
-    public void uploadProfile(String name, MultipartFile file) {
-        // S3 client
-        final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
+    public StorageService(Environment environment) {
+        System.out.println("GET KEYS: " + environment.getProperty("API_ACCESS") + " " + environment.getProperty("API_SECRET"));
+        this.s3 = AmazonS3ClientBuilder.standard()
                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
-                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
+                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(Objects.requireNonNull(environment.getProperty("API_ACCESS")), Objects.requireNonNull(environment.getProperty("API_SECRET")))))
                 .build();
-
-        String bucketName = "hagima-face";
-        // upload local file
-
+    }
+    public void uploadProfile(String name, MultipartFile file) {
         ObjectMetadata data = new ObjectMetadata();
         data.setContentType(file.getContentType());
         data.setContentLength(file.getSize());
@@ -42,5 +42,11 @@ public class StorageService {
         } catch(SdkClientException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getProfileUrl(String name) {
+            GeneratePresignedUrlRequest requestUrl =
+                    new GeneratePresignedUrlRequest(bucketName, name, HttpMethod.GET);
+            return s3.generatePresignedUrl(requestUrl).toString();
     }
 }

@@ -19,6 +19,6 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Profile> profiles;
 }
