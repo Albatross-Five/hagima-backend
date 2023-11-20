@@ -1,7 +1,7 @@
 package com.example.hagimabackend.controller;
 
 import com.example.hagimabackend.controller.dto.ProfileRequestDTO;
-import com.example.hagimabackend.controller.dto.ProfileResponseDto;
+import com.example.hagimabackend.controller.dto.ProfileResponseDTO;
 import com.example.hagimabackend.entity.CustomUserDetails;
 import com.example.hagimabackend.entity.Member;
 import com.example.hagimabackend.global.response.DataResponse;
@@ -39,7 +39,7 @@ public class ProfileController {
 
     @GetMapping("")
     @Operation(summary = "프로필 목록 조회")
-    public ResponseEntity<DataResponse<List<ProfileResponseDto>>> getProfiles () {
+    public ResponseEntity<DataResponse<List<ProfileResponseDTO>>> getProfiles () {
         CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member =  userDetails.getMember();
         return new ResponseEntity<>(DataResponse.of(HttpStatus.OK, "프로필 조회 성공", profileService.getProfiles(member.getUuid().toString())), HttpStatus.OK);

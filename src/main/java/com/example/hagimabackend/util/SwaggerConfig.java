@@ -15,7 +15,7 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("Hagima Main Backend API").description("하지마 메인 백엔드 서버 API 문서").version("v1"))
+                .info(new Info().title("Hagima Main Backend API").description("하지마 메인 백엔드 서버 API 문서 !!!!!!!!!회원가입 이외에는 전부 로그인 해야함!!!!!! Authorization 필수").version("v1"))
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new Components().addSecuritySchemes("bearerAuth",
                         new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("UUID")));
