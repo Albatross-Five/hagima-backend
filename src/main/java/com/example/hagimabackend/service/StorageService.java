@@ -10,11 +10,15 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import com.amazonaws.services.s3.model.S3Object;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.mock.web.MockMultipartFile;
+
 import java.io.IOException;
-import java.util.Objects;
+import java.io.InputStream;
+import java.util.*;
 
 @Service
 public class StorageService {
@@ -29,6 +33,7 @@ public class StorageService {
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(Objects.requireNonNull(environment.getProperty("API_ACCESS")), Objects.requireNonNull(environment.getProperty("API_SECRET")))))
                 .build();
     }
+
     public void uploadProfile(String name, MultipartFile file) {
         ObjectMetadata data = new ObjectMetadata();
         data.setContentType(file.getContentType());
@@ -37,14 +42,38 @@ public class StorageService {
 
             PutObjectResult objectResult = s3.putObject(bucketName, name, file.getInputStream(), data);
             System.out.format("Object %s has been created.\n", objectResult.getContentMd5());
-        } catch(SdkClientException | IOException e) {
-            e.printStackTrace();
+        } catch (SdkClientException | IOException e) {
+            System.out.println(e.getMessage());
         }
     }
 
     public String getProfileUrl(String name) {
-            GeneratePresignedUrlRequest requestUrl =
-                    new GeneratePresignedUrlRequest(bucketName, name, HttpMethod.GET);
-            return s3.generatePresignedUrl(requestUrl).toString();
+        GeneratePresignedUrlRequest requestUrl =
+                new GeneratePresignedUrlRequest(bucketName, name, HttpMethod.GET);
+        return s3.generatePresignedUrl(requestUrl).toString();
+    }
+
+    public ArrayList<MultipartFile> getProfileImages(List<String> fileNames) {
+        ArrayList<MultipartFile> profileImages = new ArrayList<>();
+
+        fileNames.forEach(name -> {
+            try (S3Object s3Object = s3.getObject(bucketName, name)) {
+                InputStream inputStream = s3Object.getObjectContent();
+                profileImages.add(inputStreamToMultipartFile(inputStream, name));
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        });
+
+        return profileImages;
+    }
+
+    private MultipartFile inputStreamToMultipartFile(InputStream inputStream, String fileName) {
+        try {
+            return new MockMultipartFile("file", fileName, "image/jpeg", inputStream);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 }
