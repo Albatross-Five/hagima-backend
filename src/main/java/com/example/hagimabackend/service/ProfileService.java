@@ -2,7 +2,7 @@ package com.example.hagimabackend.service;
 
 
 import com.example.hagimabackend.controller.dto.ProfileRequestDTO;
-import com.example.hagimabackend.controller.dto.ProfileResponseDto;
+import com.example.hagimabackend.controller.dto.ProfileResponseDTO;
 import com.example.hagimabackend.entity.Member;
 import com.example.hagimabackend.entity.Profile;
 import com.example.hagimabackend.repository.ProfileRepository;
@@ -30,11 +30,11 @@ public class ProfileService {
         profileRepository.save(profile);
     }
 
-    public List<ProfileResponseDto> getProfiles(String uuid) {
+    public List<ProfileResponseDTO> getProfiles(String uuid) {
         List<Profile> profiles = profileRepository.findAllByUUID(UUID.fromString(uuid));
-        List<ProfileResponseDto> response = new ArrayList<>();
+        List<ProfileResponseDTO> response = new ArrayList<>();
         profiles.forEach(profile -> {
-            response.add(new ProfileResponseDto(profile.getName(), storageService.getProfileUrl(uuid + "=" + profile.getName())));
+            response.add(new ProfileResponseDTO(profile.getName(), storageService.getProfileUrl(uuid + "=" + profile.getName())));
         });
         return response;
     }
