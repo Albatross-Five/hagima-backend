@@ -1,4 +1,4 @@
-package com.example.hagimabackend.util;
+package com.example.hagimabackend.util.swagger;
 
 import io.swagger.v3.oas.models.Components;
 import org.springdoc.core.models.GroupedOpenApi;

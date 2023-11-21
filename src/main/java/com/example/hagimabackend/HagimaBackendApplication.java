@@ -10,8 +10,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class HagimaBackendApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(HagimaBackendApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(HagimaBackendApplication.class, args);
+    }
 
 }

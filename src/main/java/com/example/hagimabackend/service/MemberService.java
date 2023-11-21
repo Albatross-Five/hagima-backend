@@ -4,6 +4,8 @@ import com.example.hagimabackend.entity.CustomUserDetails;
 import com.example.hagimabackend.entity.Member;
 import com.example.hagimabackend.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,10 +33,11 @@ public class MemberService implements UserDetailsService {
                 .password("")
                 .member(member)
                 .build();
-//        return User.builder()
-//                .username(member.getUuid().toString())
-//                .password("")
-//                .authorities("ROLE_USER")
-//                .build();
+    }
+
+    public Member getMemberByHeader() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        return userDetails.getMember();
     }
 }
