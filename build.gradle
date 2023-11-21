@@ -46,6 +46,8 @@ dependencies {
 
     // HTTP Request
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation group: 'io.github.openfeign', name: 'feign-jackson', version: '13.1'
+
 }
 
 ext {

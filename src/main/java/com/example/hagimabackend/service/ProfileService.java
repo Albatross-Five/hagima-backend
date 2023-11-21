@@ -6,7 +6,7 @@ import com.example.hagimabackend.controller.dto.ProfileResponseDTO;
 import com.example.hagimabackend.entity.Member;
 import com.example.hagimabackend.entity.Profile;
 import com.example.hagimabackend.repository.ProfileRepository;
-import com.example.hagimabackend.util.feign.MLFeignClient;
+import com.example.hagimabackend.util.feign.ml.MLFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
