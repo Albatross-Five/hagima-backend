@@ -1,6 +1,9 @@
 package com.example.hagimabackend.controller;
 
+import com.example.hagimabackend.controller.dto.ProfileVoiceListResponseDTO;
 import com.example.hagimabackend.controller.dto.ProfileVoiceRequestDTO;
+import com.example.hagimabackend.entity.Voice;
+import com.example.hagimabackend.global.response.DataResponse;
 import com.example.hagimabackend.global.response.MessageResponse;
 import com.example.hagimabackend.service.MemberService;
 import com.example.hagimabackend.service.ProfileService;
@@ -17,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -32,8 +37,8 @@ public class VoiceController {
     @Operation(summary = "지인 음성 등록")
     public ResponseEntity<MessageResponse> registerVoice(@ModelAttribute ProfileVoiceRequestDTO profileVoice) {
         UUID uuid = memberService.getMemberByHeader().getUuid();
-        voiceService.addVoice(uuid, profileVoice.getNickname(), profileVoice.getFiles());
-
+        Voice voice = voiceService.addVoice(uuid, profileVoice.getNickname(), profileVoice.getFiles());
+        voiceService.createWarningVoices(uuid.toString(), profileVoice.getNickname(), voice, profileVoice.getInformal());
         return new ResponseEntity<>(MessageResponse.of(HttpStatus.OK, "AI Voice 생성 성공."), HttpStatus.OK);
     }
 
@@ -55,4 +60,20 @@ public class VoiceController {
         }
 //        return new ResponseEntity<>(storageService.getObjectUrl("hagima-voice", "test.mp3"), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/voice/{nickname}")
+    @Operation(summary = "음성 링크 가져오기")
+    public ResponseEntity<DataResponse<List<ProfileVoiceListResponseDTO>>> getVoices(@PathVariable("nickname") String nickname) {
+        UUID uuid = memberService.getMemberByHeader().getUuid();
+
+        String phone = storageService.getObjectUrl("hagima-voice", uuid + "=" + nickname + "=phone.mp3");
+        String sleep = storageService.getObjectUrl("hagima-voice", uuid + "=" + nickname + "=sleep.mp3");
+
+        List<ProfileVoiceListResponseDTO> list = new ArrayList<>();
+        list.add(new ProfileVoiceListResponseDTO("phone", phone));
+        list.add(new ProfileVoiceListResponseDTO("sleep", sleep));
+
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.OK, "음성 목록 조회 성공.", list), HttpStatus.OK);
+    }
+
 }

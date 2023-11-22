@@ -8,8 +8,8 @@ import feign.codec.Decoder;
 import feign.codec.EncodeException;
 import feign.codec.Encoder;
 import feign.form.spring.SpringFormEncoder;
-import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
+import feign.jackson.JacksonDecoder;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,7 +46,7 @@ public class VoiceFeignClientConfig {
             if (type instanceof Class && InputStream.class.isAssignableFrom((Class<?>) type)) {
                 return response.body().asInputStream();
             }
-            return new GsonDecoder().decode(response, type);
+            return new JacksonDecoder().decode(response, type);
         }
     }
 

@@ -14,4 +14,7 @@ public class ProfileVoiceRequestDTO {
     @Schema(description = "음성 파일 배열")
     private MultipartFile[] files;
 
+    @Schema(description = "true = 반말, false = 존댓말")
+    private Boolean informal;
+
 }

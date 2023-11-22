@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -34,7 +36,7 @@ public class ProfileService {
                 .pin(profileRequest.getPin()).build();
 
         String name = member.getUuid().toString() + "=" + profile.getName();
-        storageService.uploadProfile(name, profileRequest.getFaceImg());
+        storageService.uploadMultipartFile(PROFILE_BUCKET, name, profileRequest.getFaceImg());
         profileRepository.save(profile);
     }
 

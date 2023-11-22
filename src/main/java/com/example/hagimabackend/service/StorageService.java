@@ -9,13 +9,15 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
 import org.springframework.core.env.Environment;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class StorageService {
@@ -50,14 +52,27 @@ public class StorageService {
 
     }
 
-    public void uploadProfile(String name, MultipartFile file) {
+    public void uploadMultipartFile(String bucket, String name, MultipartFile file) {
         ObjectMetadata data = new ObjectMetadata();
         data.setContentType(file.getContentType());
         data.setContentLength(file.getSize());
         try {
-            PutObjectResult objectResult = s3.putObject(FACE_BUCKET, name, file.getInputStream(), data);
+            PutObjectResult objectResult = s3.putObject(bucket, name, file.getInputStream(), data);
             System.out.format("Object %s has been created.\n", objectResult.getContentMd5());
         } catch (SdkClientException | IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void uploadInputStream(String bucket, String name, String type, Long size, InputStream inputStream) {
+        ObjectMetadata data = new ObjectMetadata();
+        data.setContentLength(size);
+        data.setContentType(type);
+
+        try {
+            PutObjectResult objectResult = s3.putObject(bucket, name, inputStream, data);
+            System.out.format("Object %s has been created.\n", objectResult.getContentMd5());
+        } catch (SdkClientException e) {
             System.out.println(e.getMessage());
         }
     }
