@@ -12,20 +12,15 @@ import org.jetbrains.annotations.NotNull;
 @Table(name = "tb_voice")
 public class Voice {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @ManyToOne(targetEntity = Profile.class)
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
     private Profile profile;
 
-    @NotNull
-    @Column(length = 30)
-    private String name;
-
     @Builder
-    public Voice(Profile profile, @NotNull String name) {
+    public Voice(Profile profile, @NotNull String voiceId) {
         this.profile = profile;
-        this.name = name;
+        this.id = voiceId;
     }
 }
