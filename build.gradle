@@ -46,6 +46,9 @@ dependencies {
 
     // HTTP Request
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation group: 'io.github.openfeign', name: 'feign-jackson', version: '13.1'
+    implementation 'io.github.openfeign:feign-gson:12.1' // Replace with the latest version
+    implementation 'com.google.code.gson:gson' // Gson dependency
 }
 
 ext {

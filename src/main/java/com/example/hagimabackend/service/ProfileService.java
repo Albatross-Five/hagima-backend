@@ -6,19 +6,24 @@ import com.example.hagimabackend.controller.dto.ProfileResponseDTO;
 import com.example.hagimabackend.entity.Member;
 import com.example.hagimabackend.entity.Profile;
 import com.example.hagimabackend.repository.ProfileRepository;
-import com.example.hagimabackend.util.feign.MLFeignClient;
+import com.example.hagimabackend.util.exception.BusinessException;
+import com.example.hagimabackend.util.exception.ErrorCode;
+import com.example.hagimabackend.util.feign.ml.MLFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
 public class ProfileService {
+    private final String PROFILE_BUCKET = "hagima-face";
     private final ProfileRepository profileRepository;
     private final StorageService storageService;
     private final MLFeignClient mlFeignClient;
@@ -31,15 +36,19 @@ public class ProfileService {
                 .pin(profileRequest.getPin()).build();
 
         String name = member.getUuid().toString() + "=" + profile.getName();
-        storageService.uploadProfile(name, profileRequest.getFaceImg());
+        storageService.uploadMultipartFile(PROFILE_BUCKET, name, profileRequest.getFaceImg());
         profileRepository.save(profile);
     }
 
     public List<ProfileResponseDTO> getProfiles(String uuid) {
         List<Profile> profiles = profileRepository.findAllByUUID(UUID.fromString(uuid));
         List<ProfileResponseDTO> response = new ArrayList<>();
-        profiles.forEach(profile -> response.add(new ProfileResponseDTO(profile.getName(), storageService.getProfileUrl(uuid + "=" + profile.getName()))));
+        profiles.forEach(profile -> response.add(new ProfileResponseDTO(profile.getName(), storageService.getObjectUrl(PROFILE_BUCKET, uuid + "=" + profile.getName()))));
         return response;
+    }
+
+    public Profile getProfile(UUID uuid, String nickname) {
+        return profileRepository.findByUUIDAndNickname(uuid, nickname).orElseThrow(() -> new BusinessException(ErrorCode.Profile_NOT_FOUND));
     }
 
     public String recognition(UUID uuid, MultipartFile current) {

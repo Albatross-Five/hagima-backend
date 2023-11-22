@@ -1,4 +1,4 @@
-package com.example.hagimabackend.util.feign;
+package com.example.hagimabackend.util.feign.ml;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 @Component
-@FeignClient(name = "mlClient", url = "https://hgm-ml.p-e.kr", configuration = FeignClientConfig.class)
+@FeignClient(name = "mlClient", url = "https://hgm-ml.p-e.kr", configuration = MLFeignClientConfig.class)
 public interface MLFeignClient {
 
     @PostMapping(consumes = "multipart/form-data", value = "/profile/recognition")

@@ -1,4 +1,4 @@
-package com.example.hagimabackend.util.feign;
+package com.example.hagimabackend.util.feign.ml;
 
 import feign.codec.Encoder;
 import feign.form.spring.SpringFormEncoder;
@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
-@EnableFeignClients(basePackages = {"com.example.hagimabackend.util.feign"})
-public class FeignClientConfig {
+@EnableFeignClients(basePackages = {"com.example.hagimabackend.util.feign.ml"})
+public class MLFeignClientConfig {
     @Bean
     public Encoder feignFromEncoder() {
         return new SpringFormEncoder();

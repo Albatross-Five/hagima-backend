@@ -37,6 +37,7 @@ public class ProfileController {
     @Operation(summary = "프로필 목록 조회")
     public ResponseEntity<DataResponse<List<ProfileResponseDTO>>> getProfiles() {
         Member member = memberService.getMemberByHeader();
+
         return new ResponseEntity<>(DataResponse.of(HttpStatus.OK, "프로필 조회 성공", profileService.getProfiles(member.getUuid().toString())), HttpStatus.OK);
     }
 
