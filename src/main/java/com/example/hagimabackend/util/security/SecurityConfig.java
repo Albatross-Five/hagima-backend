@@ -27,6 +27,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable);
         http.cors(customizer -> customizer.configurationSource(corsConfigurationSource)) // 여기를 변경
                 .authorizeHttpRequests(request -> request
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
@@ -34,8 +35,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(new CustomAuthenticationFilter(userDetailsService), UsernamePasswordAuthenticationFilter.class)
-                .csrf(AbstractHttpConfigurer::disable);
+                .addFilterBefore(new CustomAuthenticationFilter(userDetailsService), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
