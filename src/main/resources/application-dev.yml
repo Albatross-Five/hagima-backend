@@ -26,6 +26,8 @@ logging:
       example:
         hagimabackend:
           DEBUG
+    org.springframework.security:
+      DEBUG
 #
 #oauth2:
 #  kakao:
