@@ -16,7 +16,7 @@ public class Voice {
     @Id
     private String id;
 
-    @ManyToOne(targetEntity = Profile.class)
+    @OneToOne(targetEntity = Profile.class)
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
     private Profile profile;
 

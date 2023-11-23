@@ -1,7 +1,7 @@
 # 프로덕션 환경: prod, 개발 환경: dev
 spring:
   profiles:
-    active: dev
+    active: prod
   servlet:
     multipart:
       max-file-size: 10MB

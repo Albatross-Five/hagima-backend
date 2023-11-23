@@ -22,14 +22,14 @@ public class SpeechRequestDTO {
     @Setter
     static
     class VoiceSettings {
-        private final int similarity_boost;
-        private final int stability;
+        private final double similarity_boost;
+        private final double stability;
         private final int style;
         private final boolean use_speaker_boost;
 
         VoiceSettings() {
-            this.similarity_boost = 0;
-            this.stability = 0;
+            this.similarity_boost = 0.5;
+            this.stability = 0.7;
             this.style = 0;
             this.use_speaker_boost = true;
         }

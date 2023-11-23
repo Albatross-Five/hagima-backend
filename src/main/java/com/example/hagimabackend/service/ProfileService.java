@@ -65,8 +65,6 @@ public class ProfileService {
             System.out.println(e.getMessage());
         }
 
-        formData.forEach(file -> System.out.println(file.getName() + " " + file.getContentType() + " " + file.getSize()));
-
         int size = formData.size();
         Object result = mlFeignClient.recognition(formData.get(0), size >= 2 ? formData.get(1) : null, size >= 3 ? formData.get(2) : null, size >= 4 ? formData.get(3) : null, current);
         System.out.println(result);
