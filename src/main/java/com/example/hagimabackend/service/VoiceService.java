@@ -76,6 +76,7 @@ public class VoiceService {
     }
 
     public List<ProfileVoiceListResponseDTO> getVoices(UUID uuid, String nickname) {
+        storageService.setCORSConfig();
         List<ProfileVoiceListResponseDTO> list = new ArrayList<>();
         Voice voice = profileService.getProfile(uuid, nickname).getVoice();
         String phone;

@@ -41,6 +41,7 @@ public class ProfileService {
     }
 
     public List<ProfileResponseDTO> getProfiles(String uuid) {
+        storageService.setCORSConfig();
         List<Profile> profiles = profileRepository.findAllByUUID(UUID.fromString(uuid));
         List<ProfileResponseDTO> response = new ArrayList<>();
         profiles.forEach(profile -> response.add(new ProfileResponseDTO(profile.getName(), storageService.getObjectUrl(PROFILE_BUCKET, uuid + "=" + profile.getName()))));

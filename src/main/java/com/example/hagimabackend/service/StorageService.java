@@ -28,6 +28,8 @@ public class StorageService {
     private final String VOICE_BUCKET = "hagima-voice";
     private final AmazonS3 s3;
 
+    private final CORSRule rule;
+
     public StorageService(Environment environment) {
         this.s3 = AmazonS3ClientBuilder.standard()
                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
@@ -40,15 +42,13 @@ public class StorageService {
 
         List<String> allowOrigins = new ArrayList<>();
         allowOrigins.add("*");
-        CORSRule rule = new CORSRule()
+        rule = new CORSRule()
                 .withId("example-cors-rule")
                 .withAllowedMethods(allowedMethods)
                 .withAllowedOrigins(allowOrigins)
                 .withMaxAgeSeconds(3600);
 
-        BucketCrossOriginConfiguration corsConfiguration = new BucketCrossOriginConfiguration().withRules(rule);
-        s3.setBucketCrossOriginConfiguration("hagima-voice", corsConfiguration);
-        s3.setBucketCrossOriginConfiguration("hagima-face", corsConfiguration);
+        setCORSConfig();
 
     }
 
@@ -75,6 +75,12 @@ public class StorageService {
         } catch (SdkClientException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public void setCORSConfig() {
+        BucketCrossOriginConfiguration corsConfiguration = new BucketCrossOriginConfiguration().withRules(rule);
+        s3.setBucketCrossOriginConfiguration(FACE_BUCKET, corsConfiguration);
+        s3.setBucketCrossOriginConfiguration(VOICE_BUCKET, corsConfiguration);
     }
 
     public String getObjectUrl(String bucket, String name) {
