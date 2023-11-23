@@ -51,7 +51,7 @@ public class ProfileService {
         return profileRepository.findByUUIDAndNickname(uuid, nickname).orElseThrow(() -> new BusinessException(ErrorCode.Profile_NOT_FOUND));
     }
 
-    public String recognition(UUID uuid, MultipartFile current) {
+    public Object recognition(UUID uuid, MultipartFile current) {
         List<String> fileNames = profileRepository.findAllByUUID(uuid).stream().map(profile -> uuid.toString() + "=" + profile.getName()).toList();
 
         AtomicInteger count = new AtomicInteger(0);
@@ -68,7 +68,7 @@ public class ProfileService {
         formData.forEach(file -> System.out.println(file.getName() + " " + file.getContentType() + " " + file.getSize()));
 
         int size = formData.size();
-        String result = mlFeignClient.recognition(formData.get(0), size >= 2 ? formData.get(1) : null, size >= 3 ? formData.get(2) : null, size >= 4 ? formData.get(3) : null, current);
+        Object result = mlFeignClient.recognition(formData.get(0), size >= 2 ? formData.get(1) : null, size >= 3 ? formData.get(2) : null, size >= 4 ? formData.get(3) : null, current);
         System.out.println(result);
 
         return result;

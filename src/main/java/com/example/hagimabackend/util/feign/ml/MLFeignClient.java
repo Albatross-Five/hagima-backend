@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface MLFeignClient {
 
     @PostMapping(consumes = "multipart/form-data", value = "/profile/recognition")
-    String recognition(
+    Object recognition(
             @RequestPart("profile1") MultipartFile profile1,
             @RequestPart("profile2") MultipartFile profile2,
             @RequestPart("profile3") MultipartFile profile3,

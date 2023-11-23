@@ -43,9 +43,9 @@ public class ProfileController {
 
     @PostMapping(value = "/recognition", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json")
     @Operation(summary = "얼굴 식별")
-    public String recognition(@ModelAttribute ProfileRecognitionRequestDTO profile) {
+    public Object recognition(@ModelAttribute ProfileRecognitionRequestDTO profile) {
         Member member = memberService.getMemberByHeader();
-        String result = profileService.recognition(member.getUuid(), profile.getCurrent());
+        Object result = profileService.recognition(member.getUuid(), profile.getCurrent());
         System.out.println(result);
         return result;
     }
