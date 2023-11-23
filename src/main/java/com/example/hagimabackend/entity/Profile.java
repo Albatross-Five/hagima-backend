@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 
 @Entity
 @Getter
@@ -28,8 +27,8 @@ public class Profile {
     @NotNull
     private Integer pin;
 
-    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Voice> voices;
+    @OneToOne(mappedBy = "profile", fetch = FetchType.LAZY)
+    private Voice voice;
 
     @Builder
     public Profile(Member member, @NotNull String name, @NotNull Integer pin) {

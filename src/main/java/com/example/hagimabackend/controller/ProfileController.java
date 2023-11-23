@@ -45,8 +45,6 @@ public class ProfileController {
     @Operation(summary = "얼굴 식별")
     public Object recognition(@ModelAttribute ProfileRecognitionRequestDTO profile) {
         Member member = memberService.getMemberByHeader();
-        Object result = profileService.recognition(member.getUuid(), profile.getCurrent());
-        System.out.println(result);
-        return result;
+        return profileService.recognition(member.getUuid(), profile.getCurrent());
     }
 }
